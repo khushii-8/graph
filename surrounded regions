@@ -1,0 +1,57 @@
+class Solution {
+public:
+    int arrx[4] = {0, 1, 0, -1};
+    int arry[4] = {1, 0, -1, 0};
+    void dfs(vector<vector<char>>& board, vector<vector<bool>>& capture, int i, int j, int n, int m)
+    {
+        capture[i][j] = false;
+        for(int dir = 0; dir < 4; dir++)
+        {
+            int x = i+arrx[dir], y = j+arry[dir];
+            if(x<n && y<m && x>=0 && y>=0 && board[x][y]=='O' && capture[x][y] == true)
+            {
+                dfs(board, capture, x, y, n, m);
+            }
+        }
+    }
+
+    void solve(vector<vector<char>>& board) {
+        int n = board.size(), m = board[0].size();
+        vector<vector<bool>> capture(n, vector<bool>(m, true));
+        for(int i=0; i<n; i++) // first column
+        {
+            if(board[i][0] == 'O')
+            {
+                dfs(board, capture, i, 0, n, m);
+            }
+        }
+        for(int j=0; j<m; j++) // first row
+        {
+            if(board[0][j] == 'O')
+            {
+                dfs(board, capture, 0, j, n, m);
+            }
+        }
+        for(int i=0; i<n; i++) // last column
+        {
+            if(board[i][m-1] == 'O')
+            {
+                dfs(board, capture, i, m-1, n, m);
+            }
+        }
+        for(int j=0; j<m; j++) // last row
+        {
+            if(board[n-1][j] == 'O')
+            {
+                dfs(board, capture, n-1, j, n, m);
+            }
+        }
+
+        for(int i=0; i<n; i++)
+        for(int j=0; j<m; j++)
+        {
+            if(board[i][j] == 'O' && capture[i][j] == true)
+            board[i][j] = 'X';
+        }
+    }
+};
